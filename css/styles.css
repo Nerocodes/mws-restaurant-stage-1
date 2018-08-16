@@ -305,9 +305,13 @@ nav h1 a {
   #restaurant-container, #reviews-container {
     position: relative;
     top: 22rem;
-    left: 20%;
+    left: 15%;
     display: flex;
     flex-direction: column;
+    width: 80%;
+    margin-right: 0rem;
+    margin-left: 0rem;
+    padding: 0rem;
   }
 
   #breadcrumb {
@@ -320,7 +324,6 @@ nav h1 a {
   #restaurant-container, #reviews-container {
     position: relative;
     top: 26rem;
-    left: 10%;
   }
 
 }
@@ -333,7 +336,7 @@ nav h1 a {
   #restaurant-container, #reviews-container {
     position: relative;
     top: 26rem;
-    left: 10%;
+    left: 15%;
   }
 
 }
@@ -343,7 +346,7 @@ nav h1 a {
   #restaurant-container, #reviews-container {
     position: relative;
     top: 33rem;
-    left: 10%;
+    left: 15%;
   }
 
 }
