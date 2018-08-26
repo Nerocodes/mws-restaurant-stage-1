@@ -315,6 +315,11 @@ nav h1 a {
     padding: 0rem;
   }
 
+  #reviews-container{
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+  }
+
   #breadcrumb {
     width: calc(100% - 80px);
   }
