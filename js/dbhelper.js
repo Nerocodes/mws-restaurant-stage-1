@@ -12,6 +12,16 @@ class DBHelper {
     return `http://localhost:1337/restaurants`;
   }
 
+  static openIdb(){
+    let dbPromise = idb.open('rr-db', 1, (upgradeDb) => {
+      const rrStore = upgradeDb.createObjectStore("restaurantsDB", {
+        keypath: 'id'
+      });
+      rrStore.createIndex('by-id', 'id');
+    });
+    return dbPromise;
+  }
+
   /**
    * Fetch restaurants from server
    */
@@ -20,14 +30,42 @@ class DBHelper {
       return response.json();
     }).then((restaurants)=> {
       console.log(restaurants);
+      DBHelper.cacheWithIdb(restaurants);
       return restaurants;
     });
   }
+
+  static cacheWithIdb(rrData){
+    return DBHelper.openIdb().then((db) => {
+      if(!db) return;
+      const tx = db.transaction('restaurantsDB', 'readwrite');
+      const rrStore = tx.objectStore('restaurantsDB');
+      rrData.forEach((restaurant) => {
+        rrStore.put(restaurant, restaurant.id);
+      });
+      return tx.complete;
+    });
+  }
+
+  static fetchCachedRestaurants(){
+    return DBHelper.openIdb().then((db) => {
+      if(!db) return;
+      let rrStore = db.transaction('restaurantsDB').objectStore('restaurantsDB');
+      return rrStore.getAll();
+    });
+  }
+
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    return DBHelper.fetchRestaurantsFromServer().then((restaurants) => {
+    return DBHelper.fetchCachedRestaurants().then((restaurants) => {
+      if(!restaurants.length){
+        return DBHelper.fetchRestaurantsFromServer();
+      }
+      return Promise.resolve(restaurants);
+    })
+    .then((restaurants) => {
       callback(null, restaurants);
     }).catch((err) => {
       callback(err, null);
@@ -153,7 +191,7 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}.jpg`);
+    return (`/img/${restaurant.id}.jpg`);
   }
 
   /**
