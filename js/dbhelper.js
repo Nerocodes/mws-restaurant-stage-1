@@ -29,7 +29,7 @@ class DBHelper {
     return fetch(DBHelper.DATABASE_URL).then((response) => {
       return response.json();
     }).then((restaurants)=> {
-      console.log(restaurants);
+      //console.log(restaurants);
       DBHelper.cacheWithIdb(restaurants);
       return restaurants;
     });
