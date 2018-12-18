@@ -1,4 +1,4 @@
-let cacheName = 'v1';
+let cacheName = 'v2';
 let cacheFiles = [
     './',
     './index.html',
@@ -24,7 +24,7 @@ let cacheFiles = [
 ];
 
 self.addEventListener('install', (e) => {
-    console.log('[ServiceWorker] Installed');
+    //console.log('[ServiceWorker] Installed');
 
     e.waitUntil(
         caches.open(cacheName).then((cache) => {
