@@ -1,14 +1,16 @@
-let cacheName = 'v2';
+let cacheName = 'v8';
 let cacheFiles = [
     './',
     './index.html',
     './restaurant.html',
-    './manifest.json',
     './css/styles.css',
     './data/restaurants.json',
     './js/main.js',
     './js/idb.js',
     './js/dbhelper.js',
+    'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
+    'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
+    'https://cdn.rawgit.com/GoogleChrome/pwacompat/v2.0.1/pwacompat.min.js',
     './js/restaurant_info.js',
     './img/1.jpg',
     './img/2.jpg',
@@ -20,6 +22,7 @@ let cacheFiles = [
     './img/8.jpg',
     './img/9.jpg',
     './img/10.jpg',
+    './img/iconmws-512.png',
     './img/iconmws-256.png',
     './img/iconmws.png'
 ];
@@ -54,9 +57,19 @@ self.addEventListener('fetch', (e) => {
     //console.log('[ServiceWorker] Fetching', e.request.url);
 
     e.respondWith(
-        caches.match(e.request).then((response) => {
+        caches.match(e.request, {ignoreSearch: true}).then((response) => {
             if(response) return response;
-            return fetch(e.request);
+            let reqClone = e.request.clone();
+            return fetch(reqClone).then((res) => {
+                if(!res) return;
+
+                let resClone = res.clone();
+                caches.open(cacheName).then((cache) => {
+                    cache.put(e.request, resClone);
+                });
+
+                return res;
+            });
         })
     )
 

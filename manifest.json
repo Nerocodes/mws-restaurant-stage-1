@@ -1,7 +1,7 @@
 {
     "name": "Restaurant Reviews",
     "short_name": "R_Reviews",
-    "start_url": "/mws-restaurant-stage-1/",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#f3f3f3",
     "theme_color": "#252831",
